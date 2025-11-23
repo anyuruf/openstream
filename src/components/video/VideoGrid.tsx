@@ -1,8 +1,14 @@
-import React from "react"
 import VideoCard from "./VideoCard"
 import   Box  from "@mui/material/Box";
+import { translateVideo} from "@/utils/translateVideo";
+import type { ContentType } from "@/types/Search";
 
-export default function VideoGrid({ videos }) {
+type Props = {
+    videos: ContentType;
+};
+
+export default function VideoGrid(props: Props) {
+    const videos = props.videos;
   // Guard against empty videos array
   if (!Array.isArray(videos) || videos.length === 0) {
     return <p style={{ color: "#aaa" }}>No videos found</p>;
@@ -13,16 +19,21 @@ export default function VideoGrid({ videos }) {
           sx={{
               width: '100%',
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(min(335px, 100%), 1fr))',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(335px, 100%), 1fr))',
               gap: 2,
+              backgroundColor:'inherit'
           }}
       >
-      {videos.map((content) => (
-        <>
-          {/* unwrap video object in {type: "video", video: {}, } */}
-          <VideoCard video={content.video} key={content.video.videoId}/>
-        </>
-      ))}
+      {videos.map((content) => {
+          const videoFilter = translateVideo(content?.video);
+        return(
+            <>
+                  {/* unwrap video object in {type: "video", video: {}, } */}
+
+                  <VideoCard miniVideo={videoFilter} key={videoFilter?.videoId}/>
+              </>);
+          }
+      )}
      </Box>
   );
 };

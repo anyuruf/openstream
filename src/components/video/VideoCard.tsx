@@ -4,33 +4,21 @@ import { Image } from "@unpic/react";
 import { formatDuration } from '@/utils/formatDuration';
 import  Typography  from "@mui/material/Typography";
 import  Avatar  from "@mui/material/Avatar";
-
-import {
-  demoVideoUrl,
-  demoVideoTitle,
-  demoChannelUrl,
-  demoChannelTitle,
-} from "@/utils/constants";
-import type { VideoType } from "@/types/api";
+import type {MiniVideoType} from "@/types/Search";
+import invariant from "tiny-invariant";
 
 const VIEW_FORMATTER = new Intl.NumberFormat(undefined, {
     notation: 'compact',
 });
+type Props = {
+    miniVideo: MiniVideoType;
+};
 
-function VideoCard({ video } : VideoType) {
-    if (!video || typeof video !== "object") return null;
+function VideoCard(props : Props) {
+    invariant(props.miniVideo, "Missing miniVideo param");
+    const {videoId, channelId, channelTitle, title, imgUrl, views, duration, postedAt} = props.miniVideo;
 
-    const videoId = video.videoId || demoVideoUrl.slice(7);
-    const channelId = video.author.channelId || demoChannelUrl.slice(8);
-    const channelTitle = video.author.title || demoChannelTitle;
-    const channelProfileUrl = video.author.avatar['url'] || demoChannelUrl;
-    const title = video.title || demoVideoTitle;
-    const imgUrl = video.thumbnails[0].url || demoVideoUrl;
-    const views = video.stats.views;
-    const duration = video.lengthSeconds;
-    const postedAt = video.publishedTimeText;
-    const videoUrl = `https://www.youtube.com/embed/${videoId}?controls=1`;
-
+    // @ts-ignore
     return (
             <Box
                 sx={{
@@ -41,6 +29,7 @@ function VideoCard({ video } : VideoType) {
                     borderTopRightRadius: 12,
                     overflow: "hidden",
                     transition: "background 0.5s ease",
+                    background: "inherit",
                     zIndex:35,
                     "&:hover": {
                         background: "linear-gradient(35deg, hsla(0, 100%, 45%, 0.35), hsla(53, 100%, 50%, 0.35))",
@@ -54,7 +43,7 @@ function VideoCard({ video } : VideoType) {
                 }}
             >
                 <Link
-                    to={`/watch?v=${videoId}`}
+                    to={`/search/watch/${videoId}`}
                     style={{
                         position: "relative",
                         aspectRatio: "16/9",
@@ -92,7 +81,7 @@ function VideoCard({ video } : VideoType) {
                                 position: "absolute",
                                 bottom: 4,
                                 right: 4,
-                                bgcolor: "hsla(28, 100%, 35%, 0.88)",
+                                backgroundColor: "hsla(28, 100%, 35%, 0.88)",
                                 color: "white",
                                 fontSize: "0.75rem",
                                 px: 0.5,
@@ -108,7 +97,7 @@ function VideoCard({ video } : VideoType) {
                 {/* --- Channel and Text --- */}
                 <Box sx={{ display: "flex", gap: 1.5 }}>
                     <Avatar
-                        src={channelProfileUrl}
+                        src={imgUrl}
                         alt={channelTitle}
                         sx={{ width: 48, height: 48 }}
                         component={Link}
@@ -123,7 +112,7 @@ function VideoCard({ video } : VideoType) {
                             color="text.primary"
                             sx={{ textDecoration: "none", lineHeight: "normal" }}
                         >
-                            {(title < 65)? title:
+                            {(title.length < 65)? title:
                                 <abbr
                                     style={{ textDecoration: "none" }}
                                     title={title}>

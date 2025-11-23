@@ -11,7 +11,13 @@ import {
 } from 'media-chrome/react';
 import 'youtube-video-element';
 
-function MediaChromeDetail({ videoId }) {
+type Props = {
+    videoId: string;
+};
+
+function MediaChromeDetail(props: Props) {
+    const videoId = props.videoId;
+    const url = `https://www.youtube.com/watch?v=${videoId}`;
   return (
     <MediaController
       style={{
@@ -21,10 +27,10 @@ function MediaChromeDetail({ videoId }) {
         boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
       }}
     >
-      {/* ✅ Use videoid instead of src */}
+      {/***** ✅ Use videoId instead of src ***/}
         <youtube-video
           slot="media"
-          src={`https://www.youtube.com/watch?v=${videoId}`}
+          src={url}
           crossorigin
           muted
         ></youtube-video>
