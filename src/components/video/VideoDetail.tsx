@@ -1,51 +1,55 @@
-import {  useState } from "react";
-import { Link, useParams } from "react-router";
+import { Link } from "react-router";
 import { Typography, Box, Stack } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
-import { VideoGrid, Loader, Navbar } from "../index";
 import MediaChromeDetail from "../media_chrome/MediaChromeDetail";
+import {VideoDetailType} from "@/types/videoDetail";
+import {translateVideoDetailCard} from "@/utils/translateVideo";
+import VideoCard from "@/components/video/VideoCard";
 
-const VideoDetail = () => {
-  const [videoDetail, setVideoDetail] = useState(null);
-  const { id } = useParams();
-  const url1 = `/v2/video-details?video_id=${id}`;
+type Props = {
+    videoDetail: VideoDetailType;
+};
 
-  if(!videoDetail?.snippet) return <Loader />;
-
-  const { snippet: { title, channelId, channelTitle }, statistics: { viewCount, likeCount } } = videoDetail;
+function VideoDetail (props: Props) {
+  const videoDetail = props.videoDetail;
+  const {cards: videoCards }= videoDetail;
 
   return (
     <Box minHeight="95vh">
     <>
-      <Navbar />
       <Stack direction={{ xs: "column", md: "row" }}>
         <Box flex={1}>
           <Box sx={{ width: "100%", position: "sticky", top: "86px" }}>
-            <MediaChromeDetail videoId={id} />
+            <MediaChromeDetail videoId={videoDetail.videoId} />
             <Typography color="#fff" variant="h5" fontWeight="bold" p={2}>
-              {title}
+              {videoDetail.title}
             </Typography>
             <Stack direction="row" justifyContent="space-between" sx={{ color: "#fff" }} py={1} px={2} >
-              <Link to={`/channel/${channelId}`}>
-                <Typography variant={{ sm: "subtitle1", md: 'h6' }}  color="#fff" >
-                  {channelTitle}
+              <Link to={`/channel/${videoDetail.author.channelId}`}>
+                <Typography variant="subtitle1"  color="#fff" >
+                  {videoDetail.author.title}
                   <CheckCircleIcon sx={{ fontSize: "12px", color: "gray", ml: "5px" }} />
                 </Typography>
               </Link>
               <Stack direction="row" gap="20px" alignItems="center">
                 <Typography variant="body1" sx={{ opacity: 0.7 }}>
-                  {parseInt(viewCount).toLocaleString()} views
+                  {videoDetail.stats.views} views
                 </Typography>
                 <Typography variant="body1" sx={{ opacity: 0.7 }}>
-                  {parseInt(likeCount).toLocaleString()} likes
+                  {videoDetail.stats.likes} likes
                 </Typography>
               </Stack>
             </Stack>
           </Box>
         </Box>
         <Box px={2} py={{ md: 1, xs: 5 }} justifyContent="center" alignItems="center" >
-          <VideoGrid videos={videoDetail.recommendedVideos} direction="column" key={videoDetail.recommendedVideos.videoId} />
+            {videoCards.map((card) => {
+                return(
+                    <VideoCard miniVideo={translateVideoDetailCard(card)} />
+                );
+                })
+            }
         </Box>
       </Stack>
       </>

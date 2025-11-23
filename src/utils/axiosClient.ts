@@ -1,10 +1,12 @@
 import axios, {type AxiosError, type AxiosResponse} from 'axios';
+import {VideoDetailType} from "@/types/videoDetail";
+import {ResultDataType} from "@/types/Search";
 
-export const BASE_URL = "https://youtube-data8.p.rapidapi.com";
+export const BASE_URL = "https://youtube138.p.rapidapi.com";
 
 const options = {
     params: {
-        maxResults: 35,
+        maxResults: 53,
     },
     headers: {
         'X-RapidAPI-Key': import.meta.env.VITE_APP_RAPID_API_KEY,
@@ -25,13 +27,16 @@ apiClient.interceptors.response.use(
     }
 );
 
-export const getVideos = async (queryString: string ) : Promise<any> => {
+export async function getVideos(queryString: string ) : Promise<AxiosResponse<ResultDataType>> {
     const url = `${BASE_URL}/search?part=snippet&q=${queryString}&hl=en&gl=US`;
     return await apiClient.get(url);
 }
 
-export const getChannel = (id : string) =>
-    apiClient.get(`channels?part=snippet&id=${id}`);
+export async function getVideoDetail (queryString : string): Promise<AxiosResponse<VideoDetailType>>{
+    const url = `${BASE_URL}/video/details/?part=snippet&id=${queryString}&hl=en&gl=US`;
+    return await apiClient.get(url);
+
+}
 
 export const getPlaylist = (id : string) =>
     apiClient.get(`playlistItems?part=snippet&playlistId=${id}`);

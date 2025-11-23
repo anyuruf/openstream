@@ -1,18 +1,17 @@
 import { SearchFeed } from "@/components"
 import { SearchPill } from "@/components/search_pill/SearchPill"
 import {categories} from "@/utils/constants";
-import type {Category} from "@/types/categories";
 import {getVideos} from "@/utils/axiosClient";
-import {useLoaderData, useParams} from "react-router";
+import {type LoaderFunctionArgs, useLoaderData} from "react-router";
+import invariant from "tiny-invariant";
 
-
-export const loader = async () => {
-    // const { searchTerm } = useParams();
-    // const cat = categories.filter((cat : Category) => cat.title == searchTerm );
-    // if(!cat) return;
-    // const url = `${cat.name}`;
-    const searchTerm = 'SpringBoot'
-    const data  = await getVideos(categories[0].name);
+export const loader = async ({params}: LoaderFunctionArgs) => {
+    invariant(params.searchTerm, "Missing searchTerm param");
+    const searchTerm   = params.searchTerm;
+    const cat = categories.find(cat => cat.title === searchTerm);
+    const url = `${cat?.name}`;
+    const data  = await getVideos(url);
+    // @ts-ignore
     const { contents } = data;
     return { contents, searchTerm };
 };

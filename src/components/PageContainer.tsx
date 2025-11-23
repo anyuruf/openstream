@@ -73,7 +73,7 @@ export default function PageContainer(props: PageContainerProps) {
                   ) : (
                     <Typography
                       key={index}
-                      sx={{ color: 'text.primary', fontWeight: 600 }}
+                      variant="caption"
                     >
                       {breadcrumb.title}
                     </Typography>
@@ -81,10 +81,6 @@ export default function PageContainer(props: PageContainerProps) {
                 })
               : null}
           </PageHeaderBreadcrumbs>
-          <PageContentHeader>
-            {title ? <Typography variant="h4">{title}</Typography> : null}
-            <PageHeaderToolbar>{actions}</PageHeaderToolbar>
-          </PageContentHeader>
         </Stack>
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           {children}

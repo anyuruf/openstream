@@ -15,12 +15,6 @@ import { StyledEngineProvider } from '@mui/material/styles';
 import AppTheme from "@/theme/AppTheme";
 import NotificationsProvider from '@/hooks/useNotifications/NotificationsProvider';
 import DialogsProvider from '@/hooks/useDialogs/DialogsProvider';
-import {
-    dataGridCustomizations,
-    datePickersCustomizations,
-    formInputCustomizations,
-    sidebarCustomizations,
-} from "@/theme/customizations";
 
 export function Layout({
   children,
@@ -49,17 +43,11 @@ export function Layout({
 
 const cache = createEmotionCache();
 
-const themeComponents = {
-    ...dataGridCustomizations,
-    ...datePickersCustomizations,
-    ...sidebarCustomizations,
-    ...formInputCustomizations,
-};
 
 function RootElement (props: { disableCustomTheme?: boolean }) {
     return(
         <StyledEngineProvider injectFirst>
-            <AppTheme {...props} themeComponents={themeComponents}>
+            <AppTheme {...props} >
                 <NotificationsProvider>
                     <DialogsProvider>
                         <Outlet />

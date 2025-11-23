@@ -27,6 +27,11 @@ type Pages = {
   "/search": {
     params: {};
   };
+  "/search/watch/:videoId": {
+    params: {
+      "videoId": string;
+    };
+  };
   "/search/:searchTerm": {
     params: {
       "searchTerm": string;
@@ -37,7 +42,7 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/channel/:id" | "/video/:id" | "/search" | "/search/:searchTerm";
+    page: "/" | "/channel/:id" | "/video/:id" | "/search" | "/search/watch/:videoId" | "/search/:searchTerm";
   };
   "routes/channel.$id.tsx": {
     id: "routes/channel.$id";
@@ -53,7 +58,11 @@ type RouteFiles = {
   };
   "routes/search.tsx": {
     id: "routes/search";
-    page: "/search" | "/search/:searchTerm";
+    page: "/search" | "/search/watch/:videoId" | "/search/:searchTerm";
+  };
+  "routes/search.watch.$videoId.tsx": {
+    id: "routes/search.watch.$videoId";
+    page: "/search/watch/:videoId";
   };
   "routes/search.$searchTerm.tsx": {
     id: "routes/search.$searchTerm";
@@ -67,5 +76,6 @@ type RouteModules = {
   "routes/video.$id": typeof import("./src/routes/video.$id.tsx");
   "routes/_index": typeof import("./src/routes/_index.tsx");
   "routes/search": typeof import("./src/routes/search.tsx");
+  "routes/search.watch.$videoId": typeof import("./src/routes/search.watch.$videoId.tsx");
   "routes/search.$searchTerm": typeof import("./src/routes/search.$searchTerm.tsx");
 };

@@ -20,14 +20,14 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useLocation, useNavigate, useSearchParams } from 'react-router';
-import { useDialogs } from '../hooks/useDialogs/useDialogs';
-import useNotifications from '../hooks/useNotifications/useNotifications';
+import { useDialogs } from '@/hooks/useDialogs/useDialogs';
+import useNotifications from '@/hooks/useNotifications/useNotifications';
 import {
   deleteOne as deleteEmployee,
   getMany as getEmployees,
   type Employee,
-} from '../data/employees';
-import PageContainer from './PageContainer';
+} from '@/data/employees';
+import PageContainer from '@/components/PageContainer';
 
 const INITIAL_PAGE_SIZE = 10;
 

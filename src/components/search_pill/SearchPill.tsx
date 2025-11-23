@@ -53,6 +53,9 @@ export const SearchPill = ({
                         key={category.title}
                         size="small"
                         rounded="full"
+                        sx={({ isActive }) => ({
+                            color: isActive ? "red" : "black",
+                        })}
                     >
                          {category.title}
                     </Button>
